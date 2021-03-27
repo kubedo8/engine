@@ -35,6 +35,8 @@ import io.lumeer.core.util.js.DataFilter;
 import io.lumeer.engine.api.data.DataDocument;
 import io.lumeer.engine.api.exception.InvalidDocumentKeyException;
 import io.lumeer.storage.api.dao.CollectionDao;
+import io.lumeer.storage.api.dao.DataDao;
+import io.lumeer.storage.api.dao.DocumentDao;
 import io.lumeer.storage.api.dao.context.DaoContextSnapshot;
 
 import java.util.ArrayList;
@@ -187,6 +189,13 @@ public class DocumentUtils {
       });
 
       return documents;
+   }
+
+   public static Document loadDocumentWithData(final DocumentDao documentDao, final DataDao dataDao, final Collection collection, final String documentId) {
+      final Document document = documentDao.getDocumentById(documentId);
+      document.setData(dataDao.getData(collection.getId(), documentId));
+
+      return document;
    }
 
    public static List<Document> loadDocumentsData(final DaoContextSnapshot dao, final Collection collection, final List<Document> documents, final ConstraintManager constraintManager, final boolean encodeForFce) {
